@@ -9,3 +9,7 @@ Unfortunately, I ran into the fact that my computer lags when working in a virtu
 The screenshot shows the use of the TimeTL class.
 
 <img src="screenshots/assignment2.jpg" width="300">
+
+## Programming assignment 2 - Create a TimeTL class to represent time in 12-hour clock
+
+![movielist](screenshots/assignment3.gif)
