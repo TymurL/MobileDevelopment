@@ -10,6 +10,6 @@ The screenshot shows the use of the TimeTL class.
 
 <img src="screenshots/assignment2.jpg" width="300">
 
-## Programming assignment 2 - Create a TimeTL class to represent time in 12-hour clock
+## Programming assignment 3 - Create a BottomNavigationView with Layout which represents the list of movies
 
 ![movielist](screenshots/assignment3.gif)
