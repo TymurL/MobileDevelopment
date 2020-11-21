@@ -1,9 +1,9 @@
 package ua.kpi.comsys.iv7108
 
+import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,9 +14,11 @@ import java.io.InputStream
 /**
  * A fragment representing a list of Items.
  */
-class ItemFragment : Fragment() {
+class ItemFragment : Fragment(), MyItemRecyclerViewAdapter.OnItemClickListener {
 
     private var columnCount = 1
+    private lateinit var movies: List<Movie>
+    private lateinit var myAdapter: MyItemRecyclerViewAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,10 +41,30 @@ class ItemFragment : Fragment() {
                     columnCount <= 1 -> LinearLayoutManager(context)
                     else -> GridLayoutManager(context, columnCount)
                 }
-                adapter = MyItemRecyclerViewAdapter(JsonReader(loadJSONFromAsset()).movies)
+                movies = JsonReader(loadJSONFromAsset()).movies
+                myAdapter = MyItemRecyclerViewAdapter(movies, this@ItemFragment)
+                adapter = myAdapter
             }
         }
         return view
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.bottom_menu, menu)
+
+        val searchView: SearchView = menu.findItem(R.id.search_button).actionView as SearchView
+
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                myAdapter.filter.filter(newText)
+                return true
+            }
+        })
     }
 
     private fun loadJSONFromAsset(): String {
@@ -74,5 +96,30 @@ class ItemFragment : Fragment() {
                     putInt(ARG_COLUMN_COUNT, columnCount)
                 }
             }
+    }
+
+    override fun onItemClick(position: Int) {
+        val intent = Intent(context, FilmActivity::class.java).apply {
+            putExtra("Title", movies[position].title)
+            putExtra("Year", movies[position].year)
+            putExtra("imdbID", movies[position].imdbID)
+            putExtra("Rated", movies[position].rated)
+            putExtra("Released", movies[position].released)
+            putExtra("Runtime", movies[position].runtime)
+            putExtra("Genre", movies[position].genre)
+            putExtra("Director", movies[position].director)
+            putExtra("Writer", movies[position].writer)
+            putExtra("Actors", movies[position].actors)
+            putExtra("Plot", movies[position].plot)
+            putExtra("Language", movies[position].language)
+            putExtra("Country", movies[position].country)
+            putExtra("Awards", movies[position].awards)
+            putExtra("imdbRating", movies[position].imdbRating)
+            putExtra("imdbVotes", movies[position].imdbVotes)
+            putExtra("Production", movies[position].production)
+            putExtra("Type", movies[position].type)
+            putExtra("Poster", movies[position].poster)
+        }
+        startActivity(intent)
     }
 }
