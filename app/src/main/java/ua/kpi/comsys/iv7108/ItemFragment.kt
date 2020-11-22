@@ -17,7 +17,7 @@ import java.io.InputStream
 class ItemFragment : Fragment(), MyItemRecyclerViewAdapter.OnItemClickListener {
 
     private var columnCount = 1
-    private lateinit var movies: List<Movie>
+    private lateinit var movies: MutableList<Movie>
     private lateinit var myAdapter: MyItemRecyclerViewAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,6 +26,7 @@ class ItemFragment : Fragment(), MyItemRecyclerViewAdapter.OnItemClickListener {
         arguments?.let {
             columnCount = it.getInt(ARG_COLUMN_COUNT)
         }
+        setHasOptionsMenu(true)
     }
 
     override fun onCreateView(
@@ -41,7 +42,7 @@ class ItemFragment : Fragment(), MyItemRecyclerViewAdapter.OnItemClickListener {
                     columnCount <= 1 -> LinearLayoutManager(context)
                     else -> GridLayoutManager(context, columnCount)
                 }
-                movies = JsonReader(loadJSONFromAsset()).movies
+                movies = JsonReader(loadJSONFromAsset()).movies as MutableList<Movie>
                 myAdapter = MyItemRecyclerViewAdapter(movies, this@ItemFragment)
                 adapter = myAdapter
             }
@@ -51,9 +52,11 @@ class ItemFragment : Fragment(), MyItemRecyclerViewAdapter.OnItemClickListener {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.bottom_menu, menu)
+        menu.clear()
+        inflater.inflate(R.menu.search_menu, menu)
 
-        val searchView: SearchView = menu.findItem(R.id.search_button).actionView as SearchView
+        val searchView: SearchView = menu.findItem(R.id.search_button)?.actionView as SearchView
+        searchView.queryHint = "Search"
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {

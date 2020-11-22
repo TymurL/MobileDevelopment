@@ -1,12 +1,12 @@
 package ua.kpi.comsys.iv7108
 
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
-import java.util.ArrayList
+import java.util.*
+
 
 /**
  * [RecyclerView.Adapter] that can display a [Movie].
@@ -38,6 +38,8 @@ class MyItemRecyclerViewAdapter(
                 holder.poster.context.packageName
             )
         )
+        holder.setDeleteListener()
+        holder.setClickListener()
     }
 
     override fun getItemCount(): Int = values.size
@@ -48,6 +50,8 @@ class MyItemRecyclerViewAdapter(
         val imdbID: TextView = view.findViewById(R.id.imdbIDView)
         val type: TextView = view.findViewById(R.id.typeView)
         val poster: ImageView = view.findViewById(R.id.posterView)
+        val deleteLayout: TextView = view.findViewById(R.id.delete_layout)
+        val filmLayout: FrameLayout  = view.findViewById(R.id.fragment_movie)
 
         override fun toString(): String {
             return super.toString() + " '" + title.text + "'"
@@ -60,8 +64,15 @@ class MyItemRecyclerViewAdapter(
             }
         }
 
-        init {
-            itemView.setOnClickListener(this)
+        fun setDeleteListener() {
+            deleteLayout.setOnClickListener {
+                values.removeAt(adapterPosition)
+                notifyItemRemoved(adapterPosition)
+            }
+        }
+
+        fun setClickListener() {
+            filmLayout.setOnClickListener(this)
         }
     }
 
