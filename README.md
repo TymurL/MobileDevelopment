@@ -13,3 +13,7 @@ The screenshot shows the use of the TimeTL class.
 ## Programming assignment 3 - Create a BottomNavigationView with Layout which represents the list of movies
 
 ![movielist](screenshots/assignment3.gif)
+
+## Programming assignment 4
+
+![movielist](screenshots/assignment4.gif)
