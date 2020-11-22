@@ -2,26 +2,70 @@ package ua.kpi.comsys.iv7108
 
 import org.json.JSONObject
 
-class Movie(json: String) : JSONObject(json) {
-    val title: String = this.getString("Title")
-    val year: String = this.getString("Year")
-    val rated: String = this.getString("Rated")
-    val released: String = this.getString("Released")
-    val runtime: String = this.getString("Runtime")
-    val genre: String = this.getString("Genre")
-    val director: String = this.getString("Director")
-    val writer: String = this.getString("Writer")
-    val actors: String = this.getString("Actors")
-    val plot: String = this.getString("Plot")
-    val language: String = this.getString("Language")
-    val country: String = this.getString("Country")
-    val awards: String = this.getString("Awards")
-    val imdbRating: String = this.getString("imdbRating")
-    val imdbVotes: String = this.getString("imdbVotes")
-    val imdbID: String = this.getString("imdbID")
-    val type: String = this.getString("Type")
-    val poster: String = this.getString("Poster")
-    val production: String = this.getString("Production")
+class Movie : JSONObject {
+    val title: String
+    val year: String
+    val rated: String
+    val released: String
+    val runtime: String
+    val genre: String
+    val director: String
+    val writer: String
+    val actors: String
+    val plot: String
+    val language: String
+    val country: String
+    val awards: String
+    val imdbRating: String
+    val imdbVotes: String
+    val imdbID: String
+    val type: String
+    val poster: String
+    val production: String
+
+    constructor(json: String) : super(json) {
+        title = this.getString("Title")
+        year = this.getString("Year")
+        rated = this.getString("Rated")
+        released = this.getString("Released")
+        runtime = this.getString("Runtime")
+        genre = this.getString("Genre")
+        director = this.getString("Director")
+        writer = this.getString("Writer")
+        actors = this.getString("Actors")
+        plot = this.getString("Plot")
+        language = this.getString("Language")
+        country = this.getString("Country")
+        awards = this.getString("Awards")
+        imdbRating = this.getString("imdbRating")
+        imdbVotes = this.getString("imdbVotes")
+        imdbID = this.getString("imdbID")
+        type = this.getString("Type")
+        poster = this.getString("Poster")
+        production = this.getString("Production")
+    }
+
+    constructor(movieTitle: String, movieType: String, movieYear: String) {
+        title = movieTitle
+        year = movieYear
+        rated = ""
+        released = ""
+        runtime = ""
+        genre = ""
+        director = ""
+        writer = ""
+        actors = ""
+        plot = ""
+        language = ""
+        country = ""
+        awards = ""
+        imdbRating = ""
+        imdbVotes = ""
+        imdbID = ""
+        type = movieType
+        poster = ""
+        production = ""
+    }
 }
 
 class JsonReader(json: String) : JSONObject(json) {

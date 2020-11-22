@@ -111,4 +111,9 @@ class MyItemRecyclerViewAdapter(
             notifyDataSetChanged()
         }
     }
+
+    fun addNewMovie(movie: Movie) {
+        values.add(1, movie)
+        notifyItemInserted(1)
+    }
 }

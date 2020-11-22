@@ -1,5 +1,6 @@
 package ua.kpi.comsys.iv7108
 
+import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
@@ -68,6 +69,32 @@ class ItemFragment : Fragment(), MyItemRecyclerViewAdapter.OnItemClickListener {
                 return true
             }
         })
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        R.id.add_button -> {
+            val intent = Intent(context, AddFilmActivity::class.java)
+            startActivityForResult(intent, 0)
+            true
+        }
+        else -> {
+            super.onOptionsItemSelected(item)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == 0) {
+            if (resultCode == RESULT_OK && data != null) {
+                val newMovie = Movie(
+                    data.getStringExtra("title")!!,
+                    data.getStringExtra("type")!!,
+                    data.getStringExtra("year")!!
+                )
+                myAdapter.addNewMovie(newMovie)
+            }
+        }
     }
 
     private fun loadJSONFromAsset(): String {
