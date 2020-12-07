@@ -6,27 +6,17 @@ import android.os.Bundle
 import android.view.*
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import java.io.IOException
 import java.io.InputStream
 
-/**
- * A fragment representing a list of Items.
- */
 class ItemFragment : Fragment(), MyItemRecyclerViewAdapter.OnItemClickListener {
 
-    private var columnCount = 1
     private lateinit var movies: MutableList<Movie>
     private lateinit var myAdapter: MyItemRecyclerViewAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        arguments?.let {
-            columnCount = it.getInt(ARG_COLUMN_COUNT)
-        }
         setHasOptionsMenu(true)
     }
 
@@ -36,13 +26,8 @@ class ItemFragment : Fragment(), MyItemRecyclerViewAdapter.OnItemClickListener {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_item_list, container, false)
 
-        // Set the adapter
         if (view is RecyclerView) {
             with(view) {
-                layoutManager = when {
-                    columnCount <= 1 -> LinearLayoutManager(context)
-                    else -> GridLayoutManager(context, columnCount)
-                }
                 movies = JsonReader(loadJSONFromAsset()).movies as MutableList<Movie>
                 myAdapter = MyItemRecyclerViewAdapter(movies, this@ItemFragment)
                 adapter = myAdapter
@@ -111,21 +96,6 @@ class ItemFragment : Fragment(), MyItemRecyclerViewAdapter.OnItemClickListener {
             return ""
         }
         return json
-    }
-
-    companion object {
-
-        // TODO: Customize parameter argument names
-        const val ARG_COLUMN_COUNT = "column-count"
-
-        // TODO: Customize parameter initialization
-        @JvmStatic
-        fun newInstance(columnCount: Int) =
-            ItemFragment().apply {
-                arguments = Bundle().apply {
-                    putInt(ARG_COLUMN_COUNT, columnCount)
-                }
-            }
     }
 
     override fun onItemClick(position: Int) {

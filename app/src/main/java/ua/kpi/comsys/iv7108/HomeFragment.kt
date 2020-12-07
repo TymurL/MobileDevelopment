@@ -1,59 +1,107 @@
 package ua.kpi.comsys.iv7108
 
+import android.app.Activity.RESULT_OK
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [HomeFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class HomeFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+
+    private val photoAdapter = PhotoAdapter()
+    private val photoList = mutableListOf<PhotoGrid>()
+    private var numberOfPhotoInGrid = 0
+
+    init {
+        photoAdapter.submitList(photoList)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+        setHasOptionsMenu(true)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        menu.clear()
+        inflater.inflate(R.menu.add_photo_menu, menu)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false)
+        val view = inflater.inflate(R.layout.fragment_home, container, false)
+
+        if (view is RecyclerView) {
+            view.adapter = photoAdapter
+        }
+        return view
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment HomeFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            HomeFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        R.id.add_button -> {
+            val intent = Intent()
+            intent.type = "image/*"
+            intent.action = Intent.ACTION_GET_CONTENT
+            startActivityForResult(Intent.createChooser(intent, "Select Picture"), 0)
+            true
+        }
+        else -> {
+            super.onOptionsItemSelected(item)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == 0) {
+            if (resultCode == RESULT_OK && data != null) {
+                addPhoto(data.data)
+            }
+        }
+    }
+
+    private fun addPhoto(uri: Uri?) {
+        if (photoList.isEmpty() || numberOfPhotoInGrid == 0) {
+            val index = photoList.size
+            photoList.add(
+                index,
+                PhotoGrid(
+                    photo1 = uri,
+                    photo2 = null,
+                    photo3 = null,
+                    photo4 = null,
+                    photo5 = null,
+                    photo6 = null,
+                    photo7 = null,
+                    photo8 = null,
+                    photo9 = null,
+                    photo10 = null
+                )
+            )
+            numberOfPhotoInGrid++
+            photoAdapter.notifyItemInserted(index)
+        } else {
+            val index = photoList.lastIndex
+            when (numberOfPhotoInGrid) {
+                1 -> photoList[index] = photoList[index].copy(photo2 = uri)
+                2 -> photoList[index] = photoList[index].copy(photo3 = uri)
+                3 -> photoList[index] = photoList[index].copy(photo4 = uri)
+                4 -> photoList[index] = photoList[index].copy(photo5 = uri)
+                5 -> photoList[index] = photoList[index].copy(photo6 = uri)
+                6 -> photoList[index] = photoList[index].copy(photo7 = uri)
+                7 -> photoList[index] = photoList[index].copy(photo8 = uri)
+                8 -> photoList[index] = photoList[index].copy(photo9 = uri)
+                9 -> {
+                    photoList[index] = photoList[index].copy(photo10 = uri)
+                    numberOfPhotoInGrid = -1
                 }
             }
+            numberOfPhotoInGrid++
+            photoAdapter.notifyItemChanged(photoList.lastIndex)
+        }
     }
 }

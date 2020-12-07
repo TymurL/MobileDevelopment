@@ -7,7 +7,6 @@ import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import java.util.*
 
-
 /**
  * [RecyclerView.Adapter] that can display a [Movie].
  */

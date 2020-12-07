@@ -14,10 +14,10 @@
             android:id="@+id/delete_layout"
             android:layout_width="70dp"
             android:layout_height="match_parent"
-            android:gravity="center"
             android:background="@android:color/holo_red_dark"
-            android:textColor="@android:color/white"
-            android:text="Delete"/>
+            android:gravity="center"
+            android:text="Delete"
+            android:textColor="@android:color/white" />
     </FrameLayout>
 
     <FrameLayout
@@ -25,10 +25,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/white">
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/film_const_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
             <ImageView
                 android:id="@+id/posterView"
                 android:layout_width="300px"
