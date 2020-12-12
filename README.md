@@ -24,3 +24,7 @@ It was difficult to implement custom grid of photos
 
 <img src="screenshots/assignment5.1.gif" width="350">
 <img src="screenshots/assignment5.2.gif" width="700">
+
+## Programming assignment 6
+
+<img src="screenshots/assignment6.jpg" width="350">
