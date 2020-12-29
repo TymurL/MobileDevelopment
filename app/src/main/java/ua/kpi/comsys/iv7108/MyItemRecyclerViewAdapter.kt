@@ -37,8 +37,6 @@ class MyItemRecyclerViewAdapter(
                 holder.poster.context.packageName
             )
         )
-        holder.setDeleteListener()
-        holder.setClickListener()
     }
 
     override fun getItemCount(): Int = values.size
@@ -49,8 +47,6 @@ class MyItemRecyclerViewAdapter(
         val imdbID: TextView = view.findViewById(R.id.imdbIDView)
         val type: TextView = view.findViewById(R.id.typeView)
         val poster: ImageView = view.findViewById(R.id.posterView)
-        val deleteLayout: TextView = view.findViewById(R.id.delete_layout)
-        val filmLayout: FrameLayout  = view.findViewById(R.id.fragment_movie)
 
         override fun toString(): String {
             return super.toString() + " '" + title.text + "'"
@@ -61,17 +57,6 @@ class MyItemRecyclerViewAdapter(
             if (position != RecyclerView.NO_POSITION) {
                 listener.onItemClick(position)
             }
-        }
-
-        fun setDeleteListener() {
-            deleteLayout.setOnClickListener {
-                values.removeAt(adapterPosition)
-                notifyItemRemoved(adapterPosition)
-            }
-        }
-
-        fun setClickListener() {
-            filmLayout.setOnClickListener(this)
         }
     }
 
@@ -114,5 +99,10 @@ class MyItemRecyclerViewAdapter(
     fun addNewMovie(movie: Movie) {
         values.add(1, movie)
         notifyItemInserted(1)
+    }
+
+    fun deleteMovie(position: Int) {
+        values.removeAt(position)
+        notifyItemRemoved(position)
     }
 }

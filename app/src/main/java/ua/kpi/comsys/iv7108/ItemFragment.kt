@@ -6,9 +6,11 @@ import android.os.Bundle
 import android.view.*
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import java.io.IOException
 import java.io.InputStream
+
 
 class ItemFragment : Fragment(), MyItemRecyclerViewAdapter.OnItemClickListener {
 
@@ -30,6 +32,8 @@ class ItemFragment : Fragment(), MyItemRecyclerViewAdapter.OnItemClickListener {
             with(view) {
                 movies = JsonReader(loadJSONFromAsset()).movies as MutableList<Movie>
                 myAdapter = MyItemRecyclerViewAdapter(movies, this@ItemFragment)
+                val itemTouchHelper = ItemTouchHelper(SwipeToDeleteCallback(myAdapter, context))
+                itemTouchHelper.attachToRecyclerView(view)
                 adapter = myAdapter
             }
         }
@@ -85,7 +89,7 @@ class ItemFragment : Fragment(), MyItemRecyclerViewAdapter.OnItemClickListener {
     private fun loadJSONFromAsset(): String {
         val json: String
         json = try {
-            val inputStream: InputStream = activity!!.assets.open("MoviesList.txt")
+            val inputStream: InputStream = requireActivity().assets.open("MoviesList.txt")
             val size: Int = inputStream.available()
             val buffer = ByteArray(size)
             inputStream.read(buffer)
