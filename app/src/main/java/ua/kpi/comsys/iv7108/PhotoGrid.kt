@@ -1,16 +1,14 @@
 package ua.kpi.comsys.iv7108
 
-import android.net.Uri
-
 data class PhotoGrid(
-    val photo1: Uri?,
-    val photo2: Uri?,
-    val photo3: Uri?,
-    val photo4: Uri?,
-    val photo5: Uri?,
-    val photo6: Uri?,
-    val photo7: Uri?,
-    val photo8: Uri?,
-    val photo9: Uri?,
-    val photo10: Uri?
+    val photo1: String,
+    val photo2: String,
+    val photo3: String,
+    val photo4: String,
+    val photo5: String,
+    val photo6: String,
+    val photo7: String,
+    val photo8: String,
+    val photo9: String,
+    val photo10: String
 )

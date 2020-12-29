@@ -4,30 +4,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
 
-class PhotoAdapter : ListAdapter<PhotoGrid, PhotoAdapter.PhotoGridViewHolder>(diffUtil) {
-
-    companion object {
-        private val diffUtil = object : DiffUtil.ItemCallback<PhotoGrid>() {
-            override fun areItemsTheSame(
-                oldItem: PhotoGrid,
-                newItem: PhotoGrid
-            ): Boolean {
-                return oldItem == newItem
-            }
-
-            override fun areContentsTheSame(
-                oldItem: PhotoGrid,
-                newItem: PhotoGrid
-            ): Boolean {
-                return oldItem == newItem
-            }
-
-        }
-    }
+class PhotoAdapter(private val list: List<PhotoGrid>) :
+    RecyclerView.Adapter<PhotoAdapter.PhotoGridViewHolder>() {
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -39,21 +20,23 @@ class PhotoAdapter : ListAdapter<PhotoGrid, PhotoAdapter.PhotoGridViewHolder>(di
     }
 
     override fun onBindViewHolder(holder: PhotoAdapter.PhotoGridViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        holder.bind(list[position])
     }
 
     inner class PhotoGridViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         fun bind(grid: PhotoGrid) {
-            itemView.findViewById<ImageView>(R.id.img1).setImageURI(grid.photo1)
-            itemView.findViewById<ImageView>(R.id.img2).setImageURI(grid.photo2)
-            itemView.findViewById<ImageView>(R.id.img3).setImageURI(grid.photo3)
-            itemView.findViewById<ImageView>(R.id.img4).setImageURI(grid.photo4)
-            itemView.findViewById<ImageView>(R.id.img5).setImageURI(grid.photo5)
-            itemView.findViewById<ImageView>(R.id.img6).setImageURI(grid.photo6)
-            itemView.findViewById<ImageView>(R.id.img7).setImageURI(grid.photo7)
-            itemView.findViewById<ImageView>(R.id.img8).setImageURI(grid.photo8)
-            itemView.findViewById<ImageView>(R.id.img9).setImageURI(grid.photo9)
-            itemView.findViewById<ImageView>(R.id.img10).setImageURI(grid.photo10)
+            Picasso.get().load(grid.photo1).into(itemView.findViewById<ImageView>(R.id.img1))
+            Picasso.get().load(grid.photo2).into(itemView.findViewById<ImageView>(R.id.img2))
+            Picasso.get().load(grid.photo3).into(itemView.findViewById<ImageView>(R.id.img3))
+            Picasso.get().load(grid.photo4).into(itemView.findViewById<ImageView>(R.id.img4))
+            Picasso.get().load(grid.photo5).into(itemView.findViewById<ImageView>(R.id.img5))
+            Picasso.get().load(grid.photo6).into(itemView.findViewById<ImageView>(R.id.img6))
+            Picasso.get().load(grid.photo7).into(itemView.findViewById<ImageView>(R.id.img7))
+            Picasso.get().load(grid.photo8).into(itemView.findViewById<ImageView>(R.id.img8))
+            Picasso.get().load(grid.photo9).into(itemView.findViewById<ImageView>(R.id.img9))
+            Picasso.get().load(grid.photo10).into(itemView.findViewById<ImageView>(R.id.img10))
         }
     }
+
+    override fun getItemCount(): Int = list.size
 }
