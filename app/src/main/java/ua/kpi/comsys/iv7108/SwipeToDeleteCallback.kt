@@ -45,8 +45,8 @@ class SwipeToDeleteCallback(private val mAdapter: MyItemRecyclerViewAdapter, con
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
         val itemView = viewHolder.itemView
         val backgroundCornerOffset = 20 //so background is behind the rounded corners of itemView
-        val iconMargin = (itemView.height - icon!!.intrinsicHeight) / 16
-        val iconTop = itemView.top + (itemView.height - icon.intrinsicHeight) / 2
+        val iconMargin = 5
+        val iconTop = itemView.top + (itemView.height - icon!!.intrinsicHeight) / 2
         val iconBottom = iconTop + icon.intrinsicHeight
         when {
             dX > 0 -> { // Swiping to the right

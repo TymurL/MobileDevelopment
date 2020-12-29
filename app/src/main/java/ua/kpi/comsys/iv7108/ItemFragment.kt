@@ -5,16 +5,15 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import android.widget.SearchView
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import java.io.IOException
-import java.io.InputStream
+import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
 
 
 class ItemFragment : Fragment(), MyItemRecyclerViewAdapter.OnItemClickListener {
 
-    private lateinit var movies: MutableList<Movie>
     private lateinit var myAdapter: MyItemRecyclerViewAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,15 +27,39 @@ class ItemFragment : Fragment(), MyItemRecyclerViewAdapter.OnItemClickListener {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_item_list, container, false)
 
-        if (view is RecyclerView) {
-            with(view) {
-                movies = JsonReader(loadJSONFromAsset()).movies as MutableList<Movie>
-                myAdapter = MyItemRecyclerViewAdapter(movies, this@ItemFragment)
-                val itemTouchHelper = ItemTouchHelper(SwipeToDeleteCallback(myAdapter, context))
-                itemTouchHelper.attachToRecyclerView(view)
-                adapter = myAdapter
+        val recyclerView = view.findViewById(R.id.movies) as RecyclerView
+        val emptyText = view.findViewById(R.id.empty) as TextView
+        recyclerView.visibility = View.GONE
+        emptyText.visibility = View.VISIBLE
+
+        myAdapter = MyItemRecyclerViewAdapter(recyclerView.context, this@ItemFragment)
+        myAdapter.registerAdapterDataObserver(object : AdapterDataObserver() {
+            override fun onChanged() {
+                super.onChanged()
+                if (myAdapter.itemCount == 0) {
+                    recyclerView.visibility = View.GONE
+                    emptyText.visibility = View.VISIBLE
+                } else {
+                    recyclerView.visibility = View.VISIBLE
+                    emptyText.visibility = View.GONE
+                }
             }
-        }
+
+            override fun onItemRangeRemoved(positionStart: Int, itemCount: Int) {
+                super.onItemRangeRemoved(positionStart, itemCount)
+                if (myAdapter.itemCount == 0) {
+                    recyclerView.visibility = View.GONE
+                    emptyText.visibility = View.VISIBLE
+                }
+            }
+        })
+
+        val itemTouchHelper =
+            ItemTouchHelper(SwipeToDeleteCallback(myAdapter, recyclerView.context))
+        itemTouchHelper.attachToRecyclerView(recyclerView)
+
+        recyclerView.adapter = myAdapter
+
         return view
     }
 
@@ -76,54 +99,38 @@ class ItemFragment : Fragment(), MyItemRecyclerViewAdapter.OnItemClickListener {
 
         if (requestCode == 0) {
             if (resultCode == RESULT_OK && data != null) {
-                val newMovie = Movie(
-                    data.getStringExtra("title")!!,
-                    data.getStringExtra("type")!!,
-                    data.getStringExtra("year")!!
-                )
-                myAdapter.addNewMovie(newMovie)
+//                val newMovie = Movie(
+//                    data.getStringExtra("title")!!,
+//                    data.getStringExtra("type")!!,
+//                    data.getStringExtra("year")!!
+//                )
+//                myAdapter.addNewMovie(newMovie)
             }
         }
     }
 
-    private fun loadJSONFromAsset(): String {
-        val json: String
-        json = try {
-            val inputStream: InputStream = requireActivity().assets.open("MoviesList.txt")
-            val size: Int = inputStream.available()
-            val buffer = ByteArray(size)
-            inputStream.read(buffer)
-            inputStream.close()
-            String(buffer, Charsets.UTF_8)
-        } catch (ex: IOException) {
-            ex.printStackTrace()
-            return ""
-        }
-        return json
-    }
-
     override fun onItemClick(position: Int) {
-        val intent = Intent(context, FilmActivity::class.java).apply {
-            putExtra("Title", movies[position].title)
-            putExtra("Year", movies[position].year)
-            putExtra("imdbID", movies[position].imdbID)
-            putExtra("Rated", movies[position].rated)
-            putExtra("Released", movies[position].released)
-            putExtra("Runtime", movies[position].runtime)
-            putExtra("Genre", movies[position].genre)
-            putExtra("Director", movies[position].director)
-            putExtra("Writer", movies[position].writer)
-            putExtra("Actors", movies[position].actors)
-            putExtra("Plot", movies[position].plot)
-            putExtra("Language", movies[position].language)
-            putExtra("Country", movies[position].country)
-            putExtra("Awards", movies[position].awards)
-            putExtra("imdbRating", movies[position].imdbRating)
-            putExtra("imdbVotes", movies[position].imdbVotes)
-            putExtra("Production", movies[position].production)
-            putExtra("Type", movies[position].type)
-            putExtra("Poster", movies[position].poster)
-        }
-        startActivity(intent)
+//        val intent = Intent(context, FilmActivity::class.java).apply {
+//            putExtra("Title", movies[position].title)
+//            putExtra("Year", movies[position].year)
+//            putExtra("imdbID", movies[position].imdbID)
+//            putExtra("Rated", movies[position].rated)
+//            putExtra("Released", movies[position].released)
+//            putExtra("Runtime", movies[position].runtime)
+//            putExtra("Genre", movies[position].genre)
+//            putExtra("Director", movies[position].director)
+//            putExtra("Writer", movies[position].writer)
+//            putExtra("Actors", movies[position].actors)
+//            putExtra("Plot", movies[position].plot)
+//            putExtra("Language", movies[position].language)
+//            putExtra("Country", movies[position].country)
+//            putExtra("Awards", movies[position].awards)
+//            putExtra("imdbRating", movies[position].imdbRating)
+//            putExtra("imdbVotes", movies[position].imdbVotes)
+//            putExtra("Production", movies[position].production)
+//            putExtra("Type", movies[position].type)
+//            putExtra("Poster", movies[position].poster)
+//        }
+//        startActivity(intent)
     }
 }

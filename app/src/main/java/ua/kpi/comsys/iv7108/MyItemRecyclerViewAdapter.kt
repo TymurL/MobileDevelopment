@@ -1,21 +1,27 @@
 package ua.kpi.comsys.iv7108
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.Filter
+import android.widget.Filterable
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import java.util.*
+import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.Volley
+import com.squareup.picasso.Picasso
 
 /**
  * [RecyclerView.Adapter] that can display a [Movie].
  */
 class MyItemRecyclerViewAdapter(
-    private val valuesFull: List<Movie>,
+    private val context: Context,
     private val listener: OnItemClickListener
 ) : RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder>(), Filterable {
 
-    private val values: MutableList<Movie> = valuesFull.toMutableList()
+    private val values: MutableList<Movie> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -29,14 +35,7 @@ class MyItemRecyclerViewAdapter(
         holder.year.text = item.year
         holder.imdbID.text = item.imdbID
         holder.type.text = item.type
-        holder.poster.setImageResource(
-            holder.poster.context.resources.getIdentifier(
-                if (item.poster.isNotEmpty()) item.poster.substring(0, item.poster.lastIndexOf('.'))
-                    .toLowerCase() else "",
-                "drawable",
-                holder.poster.context.packageName
-            )
-        )
+        Picasso.get().load(item.poster).into(holder.poster)
     }
 
     override fun getItemCount(): Int = values.size
@@ -47,10 +46,6 @@ class MyItemRecyclerViewAdapter(
         val imdbID: TextView = view.findViewById(R.id.imdbIDView)
         val type: TextView = view.findViewById(R.id.typeView)
         val poster: ImageView = view.findViewById(R.id.posterView)
-
-        override fun toString(): String {
-            return super.toString() + " '" + title.text + "'"
-        }
 
         override fun onClick(v: View?) {
             val position = adapterPosition
@@ -70,30 +65,42 @@ class MyItemRecyclerViewAdapter(
 
     private val myFilter = object : Filter() {
         override fun performFiltering(constraint: CharSequence?): FilterResults {
-            val filteredList: MutableList<Movie> = ArrayList();
-
-            if (constraint == null || constraint.isEmpty()) {
-                filteredList.addAll(valuesFull)
-            } else {
-                for (movie in valuesFull) {
-                    if (movie.title.contains(constraint, true)) {
-                        filteredList.add(movie)
-                    }
-                }
+            if (!constraint.isNullOrEmpty() && constraint.length >= 3) {
+                loadMovies(constraint as String)
             }
-
-            val filterResult = FilterResults()
-            filterResult.values = filteredList
-            return filterResult
+            return FilterResults()
         }
 
         override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-            values.clear()
-            if (results != null) {
-                values.addAll(results.values as Collection<Movie>)
-            }
-            notifyDataSetChanged()
         }
+    }
+
+    private fun loadMovies(search: String) {
+        val queue = Volley.newRequestQueue(context)
+        val url =
+            "http://www.omdbapi.com/?apikey=7e9fe69e&s=${search.replace(Regex("\\s+"), "+")}&page=1"
+        val request = JsonObjectRequest(
+            url,
+            null,
+            { response ->
+                val movies = response.getJSONArray("Search")
+                values.clear()
+                for (i in 0 until movies.length()) {
+                    val movie = movies.getJSONObject(i)
+                    values.add(
+                        Movie(
+                            movie.getString("Title"),
+                            movie.getString("Year"),
+                            movie.getString("imdbID"),
+                            movie.getString("Type"),
+                            movie.getString("Poster")
+                        )
+                    )
+                }
+                notifyDataSetChanged()
+            },
+            { error -> error.printStackTrace() })
+        queue.add(request)
     }
 
     fun addNewMovie(movie: Movie) {

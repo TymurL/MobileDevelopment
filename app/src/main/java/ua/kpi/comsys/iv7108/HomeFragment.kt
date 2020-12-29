@@ -22,13 +22,13 @@ class HomeFragment : Fragment() {
 
         if (view is RecyclerView) {
             photoAdapter = PhotoAdapter(photoList as List<PhotoGrid>)
-            addPhoto()
+            loadPhotos()
             view.adapter = photoAdapter
         }
         return view
     }
 
-    private fun addPhoto() {
+    private fun loadPhotos() {
         val queue = Volley.newRequestQueue(context)
         val url =
             "https://pixabay.com/api/?key=19193969-87191e5db266905fe8936d565&q=fun+party&image_type=photo&per_page=30"
