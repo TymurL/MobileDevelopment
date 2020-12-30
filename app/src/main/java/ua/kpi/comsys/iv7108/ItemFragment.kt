@@ -10,6 +10,8 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
+import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.Volley
 
 
 class ItemFragment : Fragment(), MyItemRecyclerViewAdapter.OnItemClickListener {
@@ -32,7 +34,7 @@ class ItemFragment : Fragment(), MyItemRecyclerViewAdapter.OnItemClickListener {
         recyclerView.visibility = View.GONE
         emptyText.visibility = View.VISIBLE
 
-        myAdapter = MyItemRecyclerViewAdapter(recyclerView.context, this@ItemFragment)
+        myAdapter = MyItemRecyclerViewAdapter(recyclerView.context, this)
         myAdapter.registerAdapterDataObserver(object : AdapterDataObserver() {
             override fun onChanged() {
                 super.onChanged()
@@ -109,28 +111,35 @@ class ItemFragment : Fragment(), MyItemRecyclerViewAdapter.OnItemClickListener {
         }
     }
 
-    override fun onItemClick(position: Int) {
-//        val intent = Intent(context, FilmActivity::class.java).apply {
-//            putExtra("Title", movies[position].title)
-//            putExtra("Year", movies[position].year)
-//            putExtra("imdbID", movies[position].imdbID)
-//            putExtra("Rated", movies[position].rated)
-//            putExtra("Released", movies[position].released)
-//            putExtra("Runtime", movies[position].runtime)
-//            putExtra("Genre", movies[position].genre)
-//            putExtra("Director", movies[position].director)
-//            putExtra("Writer", movies[position].writer)
-//            putExtra("Actors", movies[position].actors)
-//            putExtra("Plot", movies[position].plot)
-//            putExtra("Language", movies[position].language)
-//            putExtra("Country", movies[position].country)
-//            putExtra("Awards", movies[position].awards)
-//            putExtra("imdbRating", movies[position].imdbRating)
-//            putExtra("imdbVotes", movies[position].imdbVotes)
-//            putExtra("Production", movies[position].production)
-//            putExtra("Type", movies[position].type)
-//            putExtra("Poster", movies[position].poster)
-//        }
-//        startActivity(intent)
+    override fun onItemClick(movie: Movie) {
+        val queue = Volley.newRequestQueue(context)
+        val url = "http://www.omdbapi.com/?apikey=7e9fe69e&i=${movie.imdbID}"
+        val request = JsonObjectRequest(
+            url,
+            null,
+            { response ->
+                val detailedMovie = DetailedMovie(
+                    movie,
+                    response.getString("Rated"),
+                    response.getString("Released"),
+                    response.getString("Runtime"),
+                    response.getString("Genre"),
+                    response.getString("Director"),
+                    response.getString("Writer"),
+                    response.getString("Actors"),
+                    response.getString("Plot"),
+                    response.getString("Language"),
+                    response.getString("Country"),
+                    response.getString("Awards"),
+                    response.getString("imdbRating"),
+                    response.getString("imdbVotes"),
+                    response.getString("Production")
+                )
+                val intent = Intent(context, FilmActivity::class.java)
+                intent.putExtra("movie", detailedMovie)
+                startActivity(intent)
+            },
+            { error -> error.printStackTrace() })
+        queue.add(request)
     }
 }

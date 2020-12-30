@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.squareup.picasso.Picasso
+import org.json.JSONException
 
 /**
  * [RecyclerView.Adapter] that can display a [Movie].
@@ -47,16 +48,20 @@ class MyItemRecyclerViewAdapter(
         val type: TextView = view.findViewById(R.id.typeView)
         val poster: ImageView = view.findViewById(R.id.posterView)
 
+        init {
+            itemView.setOnClickListener(this)
+        }
+
         override fun onClick(v: View?) {
             val position = adapterPosition
             if (position != RecyclerView.NO_POSITION) {
-                listener.onItemClick(position)
+                listener.onItemClick(values[position])
             }
         }
     }
 
     interface OnItemClickListener {
-        fun onItemClick(position: Int)
+        fun onItemClick(movie: Movie)
     }
 
     override fun getFilter(): Filter {
@@ -65,7 +70,7 @@ class MyItemRecyclerViewAdapter(
 
     private val myFilter = object : Filter() {
         override fun performFiltering(constraint: CharSequence?): FilterResults {
-            if (!constraint.isNullOrEmpty() && constraint.length >= 3) {
+            if (!constraint.isNullOrBlank() && constraint.length >= 3) {
                 loadMovies(constraint as String)
             }
             return FilterResults()
@@ -78,28 +83,38 @@ class MyItemRecyclerViewAdapter(
     private fun loadMovies(search: String) {
         val queue = Volley.newRequestQueue(context)
         val url =
-            "http://www.omdbapi.com/?apikey=7e9fe69e&s=${search.replace(Regex("\\s+"), "+")}&page=1"
+            "http://www.omdbapi.com/?apikey=7e9fe69e&s=${
+                search.trim().replace(Regex("\\s+"), "+")
+            }&page=1"
         val request = JsonObjectRequest(
             url,
             null,
             { response ->
-                val movies = response.getJSONArray("Search")
                 values.clear()
-                for (i in 0 until movies.length()) {
-                    val movie = movies.getJSONObject(i)
-                    values.add(
-                        Movie(
-                            movie.getString("Title"),
-                            movie.getString("Year"),
-                            movie.getString("imdbID"),
-                            movie.getString("Type"),
-                            movie.getString("Poster")
+                try {
+                    val movies = response.getJSONArray("Search")
+                    for (i in 0 until movies.length()) {
+                        val movie = movies.getJSONObject(i)
+                        values.add(
+                            Movie(
+                                movie.getString("Title"),
+                                movie.getString("Year"),
+                                movie.getString("imdbID"),
+                                movie.getString("Type"),
+                                movie.getString("Poster")
+                            )
                         )
-                    )
+                    }
+                } catch (e: JSONException) {
+                    values.clear()
                 }
                 notifyDataSetChanged()
             },
-            { error -> error.printStackTrace() })
+            { error ->
+                error.printStackTrace()
+                values.clear()
+                notifyDataSetChanged()
+            })
         queue.add(request)
     }
 
