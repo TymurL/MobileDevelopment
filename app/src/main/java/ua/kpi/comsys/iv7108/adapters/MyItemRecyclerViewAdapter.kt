@@ -1,4 +1,4 @@
-package ua.kpi.comsys.iv7108
+package ua.kpi.comsys.iv7108.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -13,6 +13,8 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.squareup.picasso.Picasso
 import org.json.JSONException
+import ua.kpi.comsys.iv7108.R
+import ua.kpi.comsys.iv7108.models.Movie
 
 /**
  * [RecyclerView.Adapter] that can display a [Movie].

@@ -1,4 +1,4 @@
-package ua.kpi.comsys.iv7108
+package ua.kpi.comsys.iv7108.activities
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import ua.kpi.comsys.iv7108.R
 
 class AddFilmActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

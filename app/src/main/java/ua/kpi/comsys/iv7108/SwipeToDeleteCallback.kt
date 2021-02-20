@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import ua.kpi.comsys.iv7108.adapters.MyItemRecyclerViewAdapter
 
 
 class SwipeToDeleteCallback(private val mAdapter: MyItemRecyclerViewAdapter, context: Context) :

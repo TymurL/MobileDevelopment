@@ -1,4 +1,4 @@
-package ua.kpi.comsys.iv7108
+package ua.kpi.comsys.iv7108.models
 
 data class PhotoGrid(
     val photo1: String,

@@ -1,4 +1,4 @@
-package ua.kpi.comsys.iv7108
+package ua.kpi.comsys.iv7108.fragments
 
 import android.app.Activity.RESULT_OK
 import android.content.Intent
@@ -12,6 +12,13 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import ua.kpi.comsys.iv7108.adapters.MyItemRecyclerViewAdapter
+import ua.kpi.comsys.iv7108.R
+import ua.kpi.comsys.iv7108.SwipeToDeleteCallback
+import ua.kpi.comsys.iv7108.activities.AddFilmActivity
+import ua.kpi.comsys.iv7108.activities.FilmActivity
+import ua.kpi.comsys.iv7108.models.DetailedMovie
+import ua.kpi.comsys.iv7108.models.Movie
 
 
 class ItemFragment : Fragment(), MyItemRecyclerViewAdapter.OnItemClickListener {

@@ -1,10 +1,12 @@
-package ua.kpi.comsys.iv7108
+package ua.kpi.comsys.iv7108.activities
 
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.squareup.picasso.Picasso
+import ua.kpi.comsys.iv7108.R
+import ua.kpi.comsys.iv7108.models.DetailedMovie
 
 class FilmActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -1,4 +1,4 @@
-package ua.kpi.comsys.iv7108
+package ua.kpi.comsys.iv7108.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,6 +8,9 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import ua.kpi.comsys.iv7108.adapters.PhotoAdapter
+import ua.kpi.comsys.iv7108.models.PhotoGrid
+import ua.kpi.comsys.iv7108.R
 
 class HomeFragment : Fragment() {
 

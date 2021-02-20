@@ -1,4 +1,4 @@
-package ua.kpi.comsys.iv7108
+package ua.kpi.comsys.iv7108.models
 
 import android.os.Parcel
 import android.os.Parcelable

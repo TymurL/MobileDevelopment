@@ -11,9 +11,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".AddFilmActivity" />
-        <activity android:name=".FilmActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".activities.AddFilmActivity" />
+        <activity android:name=".activities.FilmActivity" />
+        <activity android:name=".activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

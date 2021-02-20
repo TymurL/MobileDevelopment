@@ -1,4 +1,4 @@
-package ua.kpi.comsys.iv7108
+package ua.kpi.comsys.iv7108.adapters
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,6 +6,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
+import ua.kpi.comsys.iv7108.R
+import ua.kpi.comsys.iv7108.models.PhotoGrid
 
 class PhotoAdapter(private val list: List<PhotoGrid>) :
     RecyclerView.Adapter<PhotoAdapter.PhotoGridViewHolder>() {
@@ -13,13 +15,13 @@ class PhotoAdapter(private val list: List<PhotoGrid>) :
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): PhotoAdapter.PhotoGridViewHolder {
+    ): PhotoGridViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.image_item, parent, false)
         return PhotoGridViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: PhotoAdapter.PhotoGridViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: PhotoGridViewHolder, position: Int) {
         holder.bind(list[position])
     }
 
