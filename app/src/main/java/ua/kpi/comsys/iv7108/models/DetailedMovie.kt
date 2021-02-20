@@ -21,7 +21,7 @@ data class DetailedMovie(
     val production: String
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
-        parcel.readSerializable() as Movie,
+        parcel.readParcelable<Movie>(Movie::class.java.classLoader)!!,
         parcel.readString()!!,
         parcel.readString()!!,
         parcel.readString()!!,
@@ -39,7 +39,7 @@ data class DetailedMovie(
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeSerializable(movie)
+        parcel.writeParcelable(movie, flags)
         parcel.writeString(rated)
         parcel.writeString(released)
         parcel.writeString(runtime)
